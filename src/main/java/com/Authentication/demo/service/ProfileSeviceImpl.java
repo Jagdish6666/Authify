@@ -43,6 +43,6 @@ public class ProfileSeviceImpl implements ProfileService{
                 .email(newProfile.getEmail())
                 .userId(newProfile.getUserId())
                 .isAccountVerified(newProfile.getIsAccountVerified())
-                .build();
+                .build(); // hello
     }
 }
