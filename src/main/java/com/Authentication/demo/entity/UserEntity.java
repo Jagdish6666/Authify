@@ -7,40 +7,43 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.Id;
 
-import javax.annotation.processing.Generated;
-import java.security.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "users")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class UserEntity {
 
-    @Id
+    @Id // ✅ correct JPA Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
+
     private String name;
-    @Column(unique = true)
+
+    @Column(unique = true, nullable = false)
     private String userId;
-    @Column(unique = true)
+
+    @Column(unique = true, nullable = false)
     private String email;
+
     private String password;
+
     private String verifyOtp;
     private Boolean isAccountVerified;
+
     private Long verifyOtpExpireAt;
+
     private String resetOtp;
     private Long resetOtpExpireAt;
 
     @CreationTimestamp
     @Column(updatable = false)
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
+
     @UpdateTimestamp
-    private Timestamp updateAt;
-
-
+    private LocalDateTime updatedAt;
 }

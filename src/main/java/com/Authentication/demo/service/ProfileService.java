@@ -7,6 +7,6 @@ public interface ProfileService {
 
 
     ProfileResponse createProfile(ProfileRequest request);
-    //this is function 
+    //this is function
 
 }
