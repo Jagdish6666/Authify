@@ -34,7 +34,7 @@ public class ProfileSeviceImpl implements ProfileService{
                 .verifyOtp(null)
                 .verifyOtpExpireAt(0L)
                 .resetOtp(null)
-                .build();
+                .build(); // Done for day
     }
 
     private ProfileResponse convertToProfileResponse(UserEntity newProfile) {
