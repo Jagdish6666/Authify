@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class ProfileSeviceImpl implements ProfileService {
+public class ProfileServiceImpl implements ProfileService {  // ✅ FIXED: changed from ProfileSeviceImpl
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
