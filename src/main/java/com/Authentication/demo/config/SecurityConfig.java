@@ -1,5 +1,6 @@
-package com.Authentication.demo;
+package com.Authentication.demo.config;
 
+import com.Authentication.demo.filter.JwtRequestFilter;
 import com.Authentication.demo.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -28,6 +30,10 @@ import java.util.List;
 public class SecurityConfig {
 
     private final AppUserService appUserService;
+    private final JwtRequestFilter jwtRequestFilter;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -41,7 +47,9 @@ public class SecurityConfig {
                                 "/auth/login",           // ✅ No prefix needed - context path is auto-applied
                                 "/register",             // ✅ No prefix needed
                                 "/auth/send-reset-otp",
-                                "/auth/reset-password"
+                                "/auth/reset-password",
+                                "/auth/logout",
+                                "/auth/is-authenticated"
                         ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
@@ -50,8 +58,11 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
 
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .logout(AbstractHttpConfigurer::disable)
+                                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(customAuthenticationEntryPoint));
+
 
         return http.build();
     }

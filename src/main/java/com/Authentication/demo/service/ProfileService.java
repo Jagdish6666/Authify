@@ -9,4 +9,8 @@ public interface ProfileService {
     ProfileResponse createProfile(ProfileRequest request);
     //this is function
 
+    ProfileResponse getProfile(String email);
+
+    void sendResetOtp(String email);
+
 }
