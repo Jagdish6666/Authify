@@ -10,6 +10,7 @@ class AuthApplicationTests {
 	void contextLoads() {
 
 		// Main Class
+		// ADD email servcie
 	}
 
 }
