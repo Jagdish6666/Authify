@@ -68,6 +68,69 @@ public class ProfileServiceImpl implements ProfileService {  // ✅ FIXED: chang
 
     }
 
+    @Override
+    public void resetPassword(String email, String otp, String newPassword) {
+        UserEntity existingUser = userRepository.findByEmail(email)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found:"+email));
+
+        if(existingUser.getResetOtp() == null || !existingUser.getResetOtp().equals(otp)){
+            throw new RuntimeException("Invalid OTP");
+        }
+
+        if(existingUser.getResetOtpExpireAt()<System.currentTimeMillis())
+        {
+            throw new RuntimeException("OTP Expired");
+        }
+
+        existingUser.setPassword(passwordEncoder.encode(newPassword));
+        existingUser.setResetOtp(null);
+        existingUser.setResetOtpExpireAt(0L);
+
+        userRepository.save(existingUser);
+
+    }
+
+    @Override
+    public void sendOtp(String email) {
+        UserEntity existingUser = userRepository.findByEmail(email)
+                .orElseThrow(()->new UsernameNotFoundException("User no found :"+email));
+
+        if(existingUser.getIsAccountVerified() != null && existingUser.getIsAccountVerified())
+        {
+            return;
+        }
+
+        // Genereate the 6 digit otp
+        String otp = String.valueOf(ThreadLocalRandom.current().nextInt(100000,1000000));
+
+        //expiry of otp time current + 24 hrs
+        long expiryTime = System.currentTimeMillis()+(24 * 60 * 60 * 1000);
+
+        // Update the user entity
+        existingUser.setVerifyOtp(otp);
+        existingUser.setVerifyOtpExpireAt(expiryTime);
+
+        // save to database
+        userRepository.save(existingUser);
+
+
+
+
+    }
+
+    @Override
+    public void verifyOtp(String userId, String otp) {
+
+    }
+
+    @Override
+    public String getLoggedInUserId(String email) {
+        UserEntity existingUser = userRepository.findByEmail(email)
+                .orElseThrow(()-> new UsernameNotFoundException("User is not found:"+email));
+
+        return existingUser.getUserId();
+    }
+
     private UserEntity convertToUserEntity(ProfileRequest request) {
         return UserEntity.builder()
                 .email(request.getEmail())
