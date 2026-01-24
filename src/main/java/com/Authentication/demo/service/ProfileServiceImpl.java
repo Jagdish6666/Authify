@@ -113,6 +113,13 @@ public class ProfileServiceImpl implements ProfileService {  // ✅ FIXED: chang
         // save to database
         userRepository.save(existingUser);
 
+        try{
+            emailService.sendResetOtpEmail(existingUser.getEmail(),otp);
+        }catch (Exception e)
+        {
+            throw new RuntimeException("Unable to send Email");
+        }
+
 
 
 

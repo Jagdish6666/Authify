@@ -25,14 +25,26 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendResetOtpEmail(String toEmail,String otp)
+//    public void sendResetOtpEmail(String toEmail,String otp)
+//    {
+//        SimpleMailMessage message = new SimpleMailMessage();
+//        message.setFrom(fromEmail);
+//        message.setTo(toEmail);
+//        message.setSubject("Password Reset OTP");
+//        message.setText("Your OTP for resetting your password is"+otp+".Use this OTP to proceed with resetting your password ");
+//        mailSender.send(message);
+//    }
+
+    public void senOtpEmail(String toEmail, String otp)
     {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(fromEmail);
         message.setTo(toEmail);
-        message.setSubject("Password Reset OTP");
-        message.setText("Your OTP for resetting your password is"+otp+".Use this OTP to proceed with resetting your password ");
+        message.setSubject("Account Verification OTP");
+        message.setText("Your OTP is "+otp+"Verify your account using this OTP");
         mailSender.send(message);
+
+
     }
 
 }
