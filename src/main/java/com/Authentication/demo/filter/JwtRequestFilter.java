@@ -29,9 +29,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             "/auth/login",
             "/register",
             "/auth/send-reset-otp",
+            "/auth/send-otp",        // ✅ MISSING – REQUIRED
             "/auth/reset-password",
             "/auth/logout",
-            "/auth/is-authenticated"  // Added this
+            "/auth/is-authenticated",
+            "/auth/verify-otp"// Added this
     );
 
     @Override

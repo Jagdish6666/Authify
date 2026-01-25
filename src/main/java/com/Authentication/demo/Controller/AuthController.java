@@ -107,7 +107,115 @@ public class AuthController {
            }
     }
 
+//    @PostMapping("/verify-otp")
+//    public void verifyEmail(@RequestBody Map<String, Object> request, @CurrentSecurityContext(expression = "authentication?.name")String email) {
+//
+//        if(request.get("otp").toString() == null)
+//        {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Missing Datails");
+//        }
+//        try{
+//
+//            profileService.verifyOtp(email,request.get("otp").toString());
+//
+//
+//        }catch (Exception e)
+//        {
+//            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+//
+//        }
+//
+//
+//    }
+
+//    @PostMapping("/verify-otp")
+//    public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> request) {
+//
+//        String email = request.get("email");
+//        String otp = request.get("otp");
+//
+//        if (email == null || otp == null) {
+//            return ResponseEntity.badRequest().body(
+//                    Map.of("message", "Email and OTP are required")
+//            );
+//        }
+//
+//        profileService.verifyOtp(email, otp);
+//
+//        return ResponseEntity.ok(
+//                Map.of("message", "OTP verified successfully")
+//        );
+//    }
+
+//    @PostMapping("/verify-otp")
+//    public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> request) {
+//
+//        String email = request.get("email");
+//        String otp = request.get("otp");
+//
+//        if (email == null || otp == null) {
+//            return ResponseEntity
+//                    .status(HttpStatus.BAD_REQUEST)
+//                    .body(Map.of(
+//                            "success", false,
+//                            "message", "Email and OTP are required"
+//                    ));
+//        }
+//
+//        try {
+//            profileService.verifyOtp(email, otp);
+//            return ResponseEntity.ok(Map.of(
+//                    "success", true,
+//                    "message", "OTP verified successfully"
+//            ));
+//        } catch (RuntimeException ex) {
+//            return ResponseEntity
+//                    .status(HttpStatus.BAD_REQUEST)
+//                    .body(Map.of(
+//                            "success", false,
+//                            "message", ex.getMessage()
+//                    ));
+//        }
+//    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyEmail(
+            @RequestBody Map<String, Object> request,
+            @CurrentSecurityContext(expression = "authentication?.name") String email) {
+
+        // Validate input
+        if (email == null || request.get("otp") == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Email and OTP are required"
+            );
+        }
+
+        try {
+            profileService.verifyOtp(email, request.get("otp").toString());
+
+            return ResponseEntity.ok(
+                    Map.of(
+                            "success", true,
+                            "message", "OTP verified successfully"
+                    )
+            );
+
+        } catch (ResponseStatusException e) {
+            throw e; // keep exact error
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    e.getMessage()
+            );
+        }
+    }
+
 
 
 
 }
+
+
+
+

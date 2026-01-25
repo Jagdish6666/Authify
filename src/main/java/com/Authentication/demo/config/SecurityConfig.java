@@ -44,12 +44,14 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/auth/login",           // ✅ No prefix needed - context path is auto-applied
-                                "/register",             // ✅ No prefix needed
+                                "/auth/login",
+                                "/register",
                                 "/auth/send-reset-otp",
+                                "/auth/send-otp",        // ✅ MISSING – REQUIRED
                                 "/auth/reset-password",
                                 "/auth/logout",
-                                "/auth/is-authenticated"
+                                "/auth/is-authenticated",
+                                "/auth/verify-otp"
                         ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
