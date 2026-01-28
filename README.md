@@ -7,7 +7,7 @@ A lightweight and extensible Java authentication library for token-based auth, s
 ## Features
 
 - Generate and verify JWT tokens
-- Configurable token signing (HMAC, RSA)
+- Configurable token signing (HMAC, RSA)//changes done
 - Session management helpers
 - Pluggable user store interface (in-memory, JDBC, etc.)
 - Utilities for password hashing and validation
